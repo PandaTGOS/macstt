@@ -7,13 +7,10 @@ on:
   pull_request:
 
 jobs:
-
   build:
-
     runs-on: macos-latest
 
     steps:
-
       - uses: actions/checkout@v4
 
       - name: Select latest Xcode
@@ -27,7 +24,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install package
-        working-directory: python
+        working-directory: bindings/python
         run: pip install -e .
 
       - name: Verify import
