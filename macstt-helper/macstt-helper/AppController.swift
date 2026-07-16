@@ -11,34 +11,47 @@ final class AppController {
 
     private let reader = CommandReader()
 
+    private let recognizer = SpeechRecognizer()
+
     func start() {
 
-        reader.onCommand = { command in
+        recognizer.onEvent = {
+            EventWriter.write($0)
+        }
 
-            switch command.cmd {
+        reader.onCommand = { [weak self] command in
 
-            case "start":
+            self?.handle(command)
 
-                SpeechPermission.request { granted in
-
-                    let event = SpeechEvent(
-                        text: granted
-                            ? "Speech authorized"
-                            : "Speech denied",
-                        isFinal: true,
-                        timestamp: Date().timeIntervalSince1970
-                    )
-
-                    EventWriter.write(event)
-
-                }
-
-            default:
-                break
-                
-            }
         }
 
         reader.start()
+
+    }
+
+    private func handle(_ command: Command) {
+
+        switch command.cmd {
+
+        case "start":
+
+            SpeechPermission.request { granted in
+
+                if granted {
+
+                    self.recognizer.start()
+
+                }
+                
+            }
+
+        case "stop":
+            recognizer.stop()
+
+        default:
+            break
+
+        }
+
     }
 }
