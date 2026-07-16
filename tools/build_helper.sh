@@ -4,11 +4,11 @@ set -e
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-PROJECT="$ROOT/macstt-helper/macstt-helper.xcodeproj"
+PROJECT="$ROOT/native/macstt-helper/macstt-helper.xcodeproj"
 
 SCHEME="macstt-helper"
 
-DESTINATION="$ROOT/python/macstt/helper"
+DESTINATION="$ROOT/bindings/python/macstt/bin"
 
 echo "Building helper..."
 

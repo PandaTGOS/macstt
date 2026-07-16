@@ -22,5 +22,5 @@ include = ["macstt*"]
 
 [tool.setuptools.package-data]
 macstt = [
-    "helper/macstt-helper"
+    "bin/macstt-helper"
 ]

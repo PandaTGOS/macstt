@@ -7,7 +7,7 @@ from .protocol import decode
 
 HELPER = (
     Path(__file__).resolve().parent
-    / "helper"
+    / "bin"
     / "macstt-helper"
 )
 
