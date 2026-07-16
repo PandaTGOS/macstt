@@ -41,7 +41,6 @@ final class SpeechRecognizer {
         request.requiresOnDeviceRecognition = true
 
         let input = engine.inputNode
-
         let format = input.outputFormat(forBus: 0)
 
         input.installTap(
@@ -49,21 +48,15 @@ final class SpeechRecognizer {
             bufferSize: 256,
             format: format
         ) { buffer, _ in
-
             request.append(buffer)
-
         }
 
         engine.prepare()
 
         do {
-
             try engine.start()
-
         } catch {
-
             return
-
         }
 
         task = recognizer.recognitionTask(
@@ -84,6 +77,7 @@ final class SpeechRecognizer {
             self.onEvent?(
 
                 SpeechEvent(
+                    type: "speech",
                     text: result.bestTranscription.formattedString,
                     isFinal: result.isFinal,
                     timestamp: Date().timeIntervalSince1970

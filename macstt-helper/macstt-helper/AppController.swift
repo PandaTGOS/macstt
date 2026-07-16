@@ -20,9 +20,7 @@ final class AppController {
         }
 
         reader.onCommand = { [weak self] command in
-
             self?.handle(command)
-
         }
 
         reader.start()
@@ -37,16 +35,35 @@ final class AppController {
 
             SpeechPermission.request { granted in
 
-                if granted {
-
-                    self.recognizer.start()
-
+                guard granted else {
+                    return
                 }
-                
+
+                EventWriter.write(
+
+                    StatusEvent(
+                        type: "started",
+                        timestamp: Date().timeIntervalSince1970
+                    )
+
+                )
+
+                self.recognizer.start()
+
             }
 
         case "stop":
+
             recognizer.stop()
+
+            EventWriter.write(
+
+                StatusEvent(
+                    type: "stopped",
+                    timestamp: Date().timeIntervalSince1970
+                )
+
+            )
 
         default:
             break
@@ -54,4 +71,5 @@ final class AppController {
         }
 
     }
+
 }

@@ -11,7 +11,7 @@ enum EventWriter {
 
     private static let encoder = JSONEncoder()
 
-    static func write(_ event: SpeechEvent) {
+    static func write<T: Encodable>(_ event: T) {
 
         guard let data = try? encoder.encode(event) else {
             return
