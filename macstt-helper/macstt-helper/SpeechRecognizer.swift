@@ -22,11 +22,21 @@ final class SpeechRecognizer {
 
     private var task: SFSpeechRecognitionTask?
 
+    private var running = false
+
+    var isRunning: Bool {
+        running
+    }
+
     var onEvent: ((SpeechEvent) -> Void)?
 
     func start() {
 
-        stop()
+        guard !running else {
+            return
+        }
+
+        running = true
 
         request = SFSpeechAudioBufferRecognitionRequest()
 
@@ -34,6 +44,7 @@ final class SpeechRecognizer {
             let request,
             let recognizer
         else {
+            running = false
             return
         }
 
@@ -56,6 +67,7 @@ final class SpeechRecognizer {
         do {
             try engine.start()
         } catch {
+            running = false
             return
         }
 
@@ -91,6 +103,12 @@ final class SpeechRecognizer {
 
     func stop() {
 
+        guard running else {
+            return
+        }
+
+        running = false
+        
         engine.stop()
 
         engine.inputNode.removeTap(onBus: 0)

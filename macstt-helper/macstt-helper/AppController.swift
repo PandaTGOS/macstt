@@ -33,6 +33,10 @@ final class AppController {
 
         case "start":
 
+            guard !recognizer.isRunning else {
+                return
+            }
+
             SpeechPermission.request { granted in
 
                 guard granted else {
@@ -53,23 +57,23 @@ final class AppController {
             }
 
         case "stop":
+            
+            guard recognizer.isRunning else {
+                return
+            }
 
             recognizer.stop()
 
             EventWriter.write(
-
                 StatusEvent(
                     type: "stopped",
                     timestamp: Date().timeIntervalSince1970
                 )
-
             )
 
         default:
             break
 
         }
-
     }
-
 }
