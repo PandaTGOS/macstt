@@ -14,7 +14,14 @@ final class AppController {
     func start() {
 
         reader.onCommand = { command in
-            print("Received command: \(command.cmd)")
+
+            let event = SpeechEvent(
+                text: command.cmd.capitalized,
+                isFinal: true,
+                timestamp: Date().timeIntervalSince1970
+            )
+
+            EventWriter.write(event)
         }
 
         reader.start()
