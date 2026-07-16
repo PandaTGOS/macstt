@@ -1,15 +1,7 @@
-import time
 from macstt import STT
 
-stt = STT()
-stt.start()
+with STT() as stt:
+    stt.start()
 
-start = time.time()
-
-for event in stt:
-    print(event)
-    if time.time() - start > 10:
-        break
-
-stt.stop()
-stt.close()
+    for event in stt:
+        print(event)

@@ -13,7 +13,12 @@ HELPER = (
 
 class STT:
     def __init__(self):
-        self.process = subprocess.Popen(
+        if not HELPER.exists():
+            raise FileNotFoundError(
+                f"macstt helper not found:\n{HELPER}"
+            )
+
+        self._process = subprocess.Popen(
             [str(HELPER)],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
@@ -22,33 +27,71 @@ class STT:
             bufsize=1,
         )
 
-    def start(self):
-        assert self.process.stdin
+        self._closed = False
 
-        self.process.stdin.write('{"cmd":"start"}\n')
-        self.process.stdin.flush()
+
+    def _stdin(self):
+        if self._closed or self._process.stdin is None:
+            raise RuntimeError("STT has been closed.")
+        
+        return self._process.stdin
+    
+
+    def start(self):
+        stdin = self._stdin()
+
+        stdin.write('{"cmd":"start"}\n')
+        stdin.flush()
+
 
     def stop(self):
-        assert self.process.stdin
+        if self._closed:
+            return
 
-        self.process.stdin.write('{"cmd":"stop"}\n')
-        self.process.stdin.flush()
+        stdin = self._stdin()
+
+        stdin.write('{"cmd":"stop"}\n')
+        stdin.flush()
+
 
     def events(self):
-        assert self.process.stdout
+        if self._process.stdout is None:
+            return
 
-        for line in self.process.stdout:
+        try:
+            for line in self._process.stdout:
+                line = line.strip()
+                if line:
+                    yield decode(json.loads(line))
+        
+        finally:
+            self.close()
 
-            line = line.strip()
-
-            if not line:
-                continue
-
-            yield decode(json.loads(line))
 
     def __iter__(self):
         return self.events()
 
+
     def close(self):
-        self.process.terminate()
-        self.process.wait()
+        if self._closed:
+            return
+
+        self._closed = True
+
+        try:
+            if self._process.stdin:
+                self._process.stdin.close()
+
+            self._process.wait(timeout=1)
+
+        except subprocess.TimeoutExpired:
+            self._process.terminate()
+            self._process.wait()
+
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        self.close()
+        return False
