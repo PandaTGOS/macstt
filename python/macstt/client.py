@@ -5,8 +5,11 @@ from pathlib import Path
 from .protocol import decode
 
 
-HELPER = Path("/path/to/build")
-
+HELPER = (
+    Path(__file__).resolve().parent
+    / "helper"
+    / "macstt-helper"
+)
 
 class STT:
     def __init__(self):
