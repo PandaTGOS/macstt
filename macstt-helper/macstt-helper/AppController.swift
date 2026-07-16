@@ -15,13 +15,28 @@ final class AppController {
 
         reader.onCommand = { command in
 
-            let event = SpeechEvent(
-                text: command.cmd.capitalized,
-                isFinal: true,
-                timestamp: Date().timeIntervalSince1970
-            )
+            switch command.cmd {
 
-            EventWriter.write(event)
+            case "start":
+
+                SpeechPermission.request { granted in
+
+                    let event = SpeechEvent(
+                        text: granted
+                            ? "Speech authorized"
+                            : "Speech denied",
+                        isFinal: true,
+                        timestamp: Date().timeIntervalSince1970
+                    )
+
+                    EventWriter.write(event)
+
+                }
+
+            default:
+                break
+                
+            }
         }
 
         reader.start()
