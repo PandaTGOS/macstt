@@ -1,0 +1,11 @@
+.DS_Store
+.build/
+.swiftpm/
+__pycache__/
+*.pyc
+dist/
+build/
+*.egg-info/
+.venv/
+.vscode/
+*.xcuserstate%
