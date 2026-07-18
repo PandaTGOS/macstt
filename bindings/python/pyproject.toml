@@ -5,13 +5,51 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "macstt"
 version = "0.1.0"
-description = "Native macOS speech-to-text for Python"
+description = "Native macOS speech-to-text for Python using Apple's Speech framework"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
     { name = "Sakhi Saswat Panda" }
 ]
 license = "MIT"
+
+keywords = [
+    "speech",
+    "speech-recognition",
+    "speech-to-text",
+    "stt",
+    "macos",
+    "apple",
+    "swift",
+    "dictation",
+    "voice",
+    "transcription"
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+
+    "Intended Audience :: Developers",
+
+    "License :: OSI Approved :: MIT License",
+
+    "Operating System :: MacOS :: MacOS X",
+
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+urls = { 
+    Homepage = "https://github.com/PandaTGOS/macstt",
+    Repository = "https://github.com/PandaTGOS/macstt",
+    Issues = "https://github.com/PandaTGOS/macstt/issues"
+}
 
 [tool.setuptools]
 include-package-data = true
