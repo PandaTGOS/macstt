@@ -33,6 +33,18 @@ jobs:
           chmod +x tools/build_package.sh
           ./tools/build_package.sh
 
+      - name: Inspect helper binary
+        run: |
+          echo "=== Helper ==="
+          file bindings/python/macstt/bin/macstt-helper
+
+      - name: Inspect wheel metadata
+        run: |
+          echo "=== Wheel ==="
+          ls -l bindings/python/dist
+
+          python -m wheel tags bindings/python/dist/*.whl
+
       - name: Verify wheel
         run: |
           python -m wheel tags bindings/python/dist/*.whl
