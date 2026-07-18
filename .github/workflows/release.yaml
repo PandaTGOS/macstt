@@ -1,20 +1,19 @@
-name: CI
+name: Release
 
 on:
   push:
-    branches:
-      - main
-      - "**"
-  pull_request:
+    tags:
+      - "v*"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  build:
+  release:
     runs-on: macos-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -34,7 +33,7 @@ jobs:
           chmod +x tools/build_package.sh
           ./tools/build_package.sh
 
-      - name: Verify platform wheel
+      - name: Verify wheel
         run: |
           python -m wheel tags bindings/python/dist/*.whl
 
@@ -58,10 +57,13 @@ jobs:
 
           python -c "from macstt import STT; print('Import successful')"
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      - name: Create GitHub Release
+
+        uses: softprops/action-gh-release@v2
+
         with:
-          name: macstt-build
-          path: |
+          generate_release_notes: true
+
+          files: |
             bindings/python/dist/*.whl
             bindings/python/dist/*.tar.gz
