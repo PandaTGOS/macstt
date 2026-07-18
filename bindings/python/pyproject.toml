@@ -11,7 +11,8 @@ requires-python = ">=3.10"
 authors = [
     { name = "Sakhi Saswat Panda" }
 ]
-license = "MIT"
+
+license = { text = "MIT" }
 
 keywords = [
     "speech",
@@ -45,11 +46,9 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
-urls = { 
-    Homepage = "https://github.com/PandaTGOS/macstt",
-    Repository = "https://github.com/PandaTGOS/macstt",
-    Issues = "https://github.com/PandaTGOS/macstt/issues"
-}
+[project.urls]
+Repository = "https://github.com/PandaTGOS/macstt"
+Issues = "https://github.com/PandaTGOS/macstt/issues"
 
 [tool.setuptools]
 include-package-data = true
