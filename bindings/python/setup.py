@@ -14,8 +14,11 @@ class PlatformWheel(bdist_wheel):
         self.root_is_pure = False
 
     def get_tag(self):
-        _, _, plat = super().get_tag()
-        return "py3", "none", plat
+        return (
+            "py3",
+            "none",
+            "macosx_11_0_arm64",
+        )
 
 
 setup(
