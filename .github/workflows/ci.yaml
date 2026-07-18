@@ -23,10 +23,34 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install package
-        working-directory: bindings/python
-        run: pip install -e .
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build release package
+        run: |
+          ./tools/build_package.sh
+
+      - name: Install wheel
+        run: |
+          pip install bindings/python/dist/*.whl
 
       - name: Verify import
         run: |
           python -c "from macstt import STT; print(STT)"
+
+      - name: Smoke test
+        run: |
+          python - <<'PY'
+from macstt import STT
+
+with STT():
+    print("Helper launched successfully.")
+PY
+
+      - name: Upload wheel
+        uses: actions/upload-artifact@v4
+        with:
+          name: macstt-wheel
+          path: bindings/python/dist/*
