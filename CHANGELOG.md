@@ -6,6 +6,15 @@ The project follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.1.1] - 2026-07-20
+
+### Fixed
+
+- Corrected package version metadata.
+- Updated `__version__` to match the published package version.
+- Ensured package metadata correctly reports version `0.1.1`.
+
+
 ## [0.1.0] - 2026-07-19
 
 Initial public release.
