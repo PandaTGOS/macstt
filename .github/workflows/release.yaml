@@ -7,10 +7,10 @@ on:
 
 permissions:
   contents: write
-  id-token: write
+
 
 jobs:
-  release:
+  build-release:
     runs-on: macos-latest
 
     steps:
@@ -43,7 +43,6 @@ jobs:
         run: |
           echo "=== Wheel ==="
           ls -l bindings/python/dist
-
           python -m wheel tags bindings/python/dist/*.whl
 
       - name: Verify wheel
@@ -63,25 +62,39 @@ jobs:
       - name: Smoke test wheel
         run: |
           python -m venv testenv
-
           source testenv/bin/activate
-
           pip install bindings/python/dist/*.whl
-
           python -c "from macstt import STT; print('Import successful')"
 
       - name: Create GitHub Release
-
         uses: softprops/action-gh-release@v2
-
         with:
           generate_release_notes: true
-
           files: |
             bindings/python/dist/*.whl
             bindings/python/dist/*.tar.gz
 
+      - name: Upload distribution artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-dist
+          path: bindings/python/dist/*
+
+  publish-pypi:
+    needs: build-release
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download distribution artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist
+
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: bindings/python/dist/
+          packages-dir: dist/
